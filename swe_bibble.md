@@ -1,3 +1,103 @@
+
+"SWE_Bible就像武林秘籍中的易筋经, 帮你打通奇经八脉, 顺利通关"
+
+ 
+
+why ?
+
+ 
+
+1年2度的技能鉴定又要开始, 技能鉴定中讲究的是快速解决问题的能力,对于基本数据结构以及算法的使用是不可避免的.目前来看, 使用C++中的标准模板库已是大势所趋. 而目前我们部门绝大多数开发都是基于C语言的,同学们对C++知之甚少, 模板库的使用更是无从谈起. 就如两军对垒, 对方已是飞机大炮, 我方还是大刀长矛. 如何解决这一实际问题呢?
+
+ 
+
+隆重推出 SWE_Bible
+
+ 
+
+what ?
+
+ 
+
+使用C语言形式的接口对标准库操作进行了封装, 不需要具备标准库的相关知识, 也可以使用标准库的强大功能.
+
+ 
+
+例如对于标准模板库中的vector, 再结合标准模板库中的algorithm, 提供如下接口
+
+ 
+
+   - 基本操作 -
+
+    VECTOR_ADD                  向vector中添加一个元素
+    VECTOR_GET                  获得vector中一个元素
+    VECTOR_SET                  设置vector中一个元素
+    VECTOR_MERGE                合并另一个vector
+    VECTOR_SIZE                 返回vector中的元素个数
+    VECTOR_CLEAR                清空vector
+    
+    - 查找 -
+
+    VECTOR_FIND                 查找vector中的元素
+    VECTOR_FIND_FROM            从某个位置开始查找vector中的元素
+    VECTOR_COUNT                统计vector中的满足特定条件的元素
+    
+    - 删除 -
+
+    VECTOR_DEL                  从vector中删除一个元素
+    VECTOR_DEL_TARGET           从vector中的删除满足特定条件的元素
+    
+    - 排序 -
+
+    VECTOR_SORT                 对vector中的元素进行排序(稳定排序)
+    VECTOR_MAX(MIN)             获取vector中的最大(最小)元素的索引号
+    
+    - 搜索 -
+
+    VECTOR_SEARCH_SEQUENCE      在vector变量1中搜索vector变量2(匹配序列)
+    VECTOR_SEARCH_SEQUENCE_FROM  从指定位置开始在vector变量1中搜索vector变量2(匹配序列)
+    VECTOR_SEARCH_ANY           在vector变量1中搜索包含在vector变量2中的元素
+    VECTOR_SEARCH_ANY_FROM       从指定位置开始在vector变量1中搜索包含在vector变量2中的元素
+
+ 
+
+为了方便大家理解这些接口, 还为每一个接口提供了使用范例, 在swe_vector_sample.cpp中
+
+ 
+
+How ?
+
+ 
+
+仅需要在需要使用的.cpp源文件中加上一个头文件即可. 例如使用封装好的vector接口,仅需
+
+#include "swe_vector.h"
+
+ 
+
+因为所有的接口都仅在.h中定义, 所以无需多余的.c或者.cpp文件进行编译, 更无须第三方的库.
+
+ 
+
+Try !
+
+ 
+
+所有的接口使用都有sample对应, 不怕学不会! 赶紧下一个SWE_Bible, 在曾经的技能鉴定题目中试一试吧! 不过有一点需要注意, SWE_Bible不可以使用在.c文件中, 因为.c文件默认用C语言编译器编译. 所以将你的代码写在.cpp中就好了.
+
+ 
+
+FeedBack
+
+ 
+
+我期待你的使用反馈, 以期进一步完善Bible. 根据大家的反馈情况, 我可能还会推出针对以下标准模板库的C封装:
+
+list
+queue
+set
+map
+
 ```
 #include "swe_vector.h"
 #include <string.h> /* sample中使用了 memset */
