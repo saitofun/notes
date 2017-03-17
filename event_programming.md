@@ -127,13 +127,11 @@ event loop用于等待和发送, 图示如下
 
 没图
 
-`
-#include <sys/epoll.h>
+`#include <sys/epoll.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "poller.h"
-
-struct event_poller
+#include "poller.h"`
+`struct event_poller
 {
 	struct epoll_event* events;
 	int epfd;
@@ -141,9 +139,9 @@ struct event_poller
 	int nevents;
 	int next_event;
 	int stop;
-};
+};`
 
-event_poller*
+`event_poller*
 poller_init(int max_events)
 {
 	event_poller* poller;
@@ -176,9 +174,9 @@ poller_init(int max_events)
 	poller->stop = 0;
 
 	return poller;
-}
+}`
 
-void
+`void
 poller_free(event_poller* poller)
 {
 	close(poller->epfd);
