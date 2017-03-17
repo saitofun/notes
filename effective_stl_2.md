@@ -1,8 +1,8 @@
-1. 仔细选择你需要的容器
+01. 仔细选择你需要的容器
 
-  > 序列容器: vector, list, deque
+  * 序列容器: vector, list, deque
     vector是默认的标准序列容器, 当需要对序列频繁插入删除是则用list, 当大部分插入在头和尾部是则用deque. 
-  > 关联容器: set, map, multiset, multimap (非标准关联容器:hash_set等)
+  * 关联容器: set, map, multiset, multimap (非标准关联容器:hash_set等)
 
 基于连续内存的容器, 插入或删除元素一般需要移动已有的数据块;
 基于节点的容器, 插入或删除元素只影响节点指向的指针;
@@ -14,7 +14,7 @@
 你需要插入事务性语义吗? 如果是, 则需要选择list容器;
 你要把迭代器的失效减到最少吗? 应该用基于节点的容器, 一般来说连续内存插入节点会使得整个容器失效.
 
-2. 不要对"容器无关代码"抱有幻想.
+02. 不要对"容器无关代码"抱有幻想.
 
 不同容器是不同的, 并不是设计为互相容易的替换, STL建立在泛化的基础上, 数组泛华为容器, 函数泛华为算法, 指针泛华为迭代器.
 设计为替换容器的常用方法是: 封装再封装, 最简单的方法是通过对容器和迭代器的类型使用typedef.
@@ -27,45 +27,76 @@ Widget bestWidget;
 WCIterator i=find(cw, begin(), cw.end(), bestWidget); 
 ```
 
-3. 使容器中对象的拷贝操作轻量而正确
+03. 使容器中对象的拷贝操作轻量而正确
 
 容器中的对象是对象的拷贝, 如果拷贝过程很昂贵, 则把对象放进容器将会出现性能瓶颈.
 由于继承的存在, 拷贝会导致分割, 如果你以基类对象建立的容器, 往里面插入派生类对象, 则派生类的派生部门会删除. 
-一般解决办法是:建立指针容器而不是对象容器
-4 用empty来代替size（）来检查是否为0. 因为对于标准容器, empty是常数时间, 对于像list的实现, size花费线性时间
-5 尽量用区间成员函数代替它们的单元素函数兄弟, 大多STL程序员过度使用copy, 几乎所有的区间被插入迭代器指定的copy的使用都可以调用区间成员函数来代替, 基本上容器提供区间构造, 区间插入, 区间删除, 区间赋值
-6 当容器容纳指向通过new分配的对象指针是, 则需要自己控制delete指针指向的对象. 
+一般解决办法是: 建立指针容器而不是对象容器
+
+04. 用empty来代替size()来检查是否为0
+
+因为对于标准容器, empty是常数时间, 对于像list的实现, size花费线性时间
+
+05. 尽量用区间成员函数代替它们的单元素函数兄弟
+
+大多STL程序员过度使用copy, 几乎所有的区间被插入迭代器指定的copy的使用都可以调用区间成员函数来代替, 基本上容器提供区间构造, 区间插入, 区间删除, 区间赋值
+
+06. 当容器容纳指向通过new分配的对象指针是, 则需要自己控制delete指针指向的对象. 
+
 当你调用for_each算法是, 你需要把delete转入一个函数对象中. 
-Struct DeleteObject: 
+```
+struct DeleteObject: 
 {
     Template<typename T>
-     void operator()( const T* ptr)const
-     { 
-        delete ptr; 
-      }
+    void operator()( const T* ptr)const
+    { 
+       delete ptr; 
+    }
 }
 for_each( vec.begin(),  vec.end(),  DeleteObject()); 
+```
 或者用boost库的shared-ptr
-Void dosomething（）
+```
+void dosomething（）
 {
-   Typdef boost::shared-ptr<Widget> SPW; 
-   Vector<SPW> vwp; 
-   For( ......)
+   typedef boost::shared-ptr<Widget> SPW; 
+   vector<SPW> vwp; 
+   for( ......)
      vwp.push_back( SPW( new Widget)); 
 }
-7 永远不要建立auto-ptr容器
-8 删除元素时候仔细选择, 不同的容器也不同  如果是连续容器, 最好是用erase_remove惯用法. c.erase( remove( c.begin(), c.end(), 1963), c.end()); 
-如果是list, 则用其成员函数c.remove(1963);  如果是关联容器, 则没有remove成员函数, 则是调用erase成员函数
-在循环内做某些事情. 
-如果是标准序列容器, 写一个循环遍历容器元素, 每当调用erase时记得用它的返回值更新迭代器
-如果是标准关联容器, 写一个循环遍历容器元素, 当你把迭代器传给erase时候后置递增它
-9 尽量使用vector和string来代替动态分配数组
-10 使用reserve来避免不必要的重新分配
-11 使用交换技巧来修正容器中过多的容量
+```
+
+07. 永远不要建立auto-ptr容器
+
+08. 删除元素时候仔细选择, 不同的容器也不同
+
+如果是连续容器, 最好是用erase_remove惯用法.
+```
+c.erase( remove( c.begin(), c.end(), 1963), c.end());
+```
+如果是list, 则用其成员函数
+```
+c.remove(1963);
+```
+如果是关联容器, 则没有remove成员函数, 应该调用erase成员函数
+
+如何在循环内做某些事情?
+如果是标准序列容器, 写一个循环遍历容器元素, 每当调用erase时记得用它的返回值更新迭代器;
+如果是标准关联容器, 写一个循环遍历容器元素, 当你把迭代器传给erase时候后置递增它;
+
+09. 尽量使用vector和string来代替动态分配数组
+
+10. 使用reserve来避免不必要的重新分配
+
+11. 使用交换技巧来修正容器中过多的容量
+
+```
 string  s; 
-. . . 使其变大, 然后删除所有
-string(s).swap(s);   
-Vector<Contestant>().swap(); 
+// 使其变大, 然后删除所有
+string(s).swap(s);   
+vector<Contestant>().swap();
+```
+
 12 不能使用vector<bool>容器, 其替代品是bitset
 13 了解相等于等价的区别 find算法中寻找元素是基于operator==, 而set::insert对相同的定义是等价, 等价是基于在一个有序区间中对象值的相对位置, 基于operator<
 
