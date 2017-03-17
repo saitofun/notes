@@ -97,34 +97,46 @@ string(s).swap(s);  
 vector<Contestant>().swap();
 ```
 
-12 不能使用vector<bool>容器, 其替代品是bitset
-13 了解相等于等价的区别 find算法中寻找元素是基于operator==, 而set::insert对相同的定义是等价, 等价是基于在一个有序区间中对象值的相对位置, 基于operator<
+12. 不能使用`vector<bool>`容器, 其替代品是bitset
 
-14 为指针的关联容器指定比较类型 
-比如用set<string *> ssp;  
-是这样的简写set<string*, less<string*>, allocator<string*>> ssp; 
-如果想要string*指针以字符串值确定顺序被存储在set中, 就必须提供自己改写的比较仿函数类, 
-Struct StringPtrLess:
-Public binary_function<const string*, const string*, bool>
+13. 了解相等于等价的区别
+
+find算法中寻找元素是基于operator==, 而set::insert对相同的定义是等价, 等价是基于在一个有序区间中对象值的相对位置, 基于operator<
+
+14. 为指针的关联容器指定比较类型 
+
+比如用`set<string *> ssp;`
+是这样的简写`set<string*, less<string*>, allocator<string*>> ssp;`
+如果想要`string*`指针以字符串值确定顺序被存储在set中, 就必须提供自己改写的比较仿函数类, 
+```
+struct StringPtrLess:
+public binary_function<const string*, const string*, bool>
 {
-bool operator()(const string* ps1, const string * ps2)const
-{
-    Return *ps1<*ps2; 
+    bool operator()(const string* ps1, const string * ps2)const
+    {
+        Return *ps1<*ps2; 
+    }
 }
-}
-Typdef set<string, StringPtrLess> StringPtrSet; 
-StringPtrSet ssp; 
-15:避免原地修改set和multiset的键
-替换方法:EmpIdSet se; 
+typdef set<string, StringPtrLess> StringPtrSet; 
+stringPtrSet ssp; 
+```
+
+15. 避免原地修改set和multiset的键
+
+替换方法:
+```
+EmpIdSet se; 
 Employee selectedId; 
 EmpIdSet::iterator i=se.find( selectedId);  //第一步找到要改变的元素
 If(  i!= se.end())
 { 
-   Employee e(*i); //第二步, 拷贝这个元素
-   se.erase(i++); //删除这个元素, 自增保持迭代器有效
-   e.setTitle("corportate "); //修改副本  
-   se.insert(i, e);  //插入新值
+    Employee e(*i); //第二步, 拷贝这个元素
+    se.erase(i++); //删除这个元素, 自增保持迭代器有效
+    e.setTitle("corportate "); //修改副本  
+    se.insert(i, e);  //插入新值
 } 
+```
+
 15: 考虑有序的vector代替关联容器
 平衡二叉树设计为应用于进行一些插入, 然后一些查找, 然后可能再进行一些插入, 然后也许一些删除, 然后再来一些查找, 然后更多的插入或删除, 然后更多的查找, 关键特征是插入, 删除, 查找混合在一起. 
 当应用中出现三个截然不同的阶段时候（建立, 查找, 重组）
@@ -169,7 +181,7 @@ const Data::first_type& k2) const // 比较函数
 {  return k1 < k2; }
 }; 
 
-16 理解map::operator[]和map-insert之间的含义
+16 理解map::operator[]和map-insert之间的含义o
   给定map<K,  V> m;   这个表达式
 m[k] = v; 
 检查键k是否已经在map里. 如果不, 就添加上, 以v作为它的对应值. 如果k已经在map里, 它的关联值被更新成v. 设计为简化”添加或更新”功能
@@ -266,12 +278,14 @@ v.push_back(RCSPW(new Widget));  // 智能指针填充它
 v.erase(remove_if(v.begin(),  v.end(),  // erase未通过检验的
 not1 (mem_fun(&Widget::isCertified))),  // Widget的指针
 v.end()); 
-19 仿函数设计用于值传递
-20 用纯函数用做判断式
+19. 仿函数设计用于值传递
+
+20. 用纯函数用做判断式
+
 判断式必须返回值为bool值, 纯函数是返回值只依赖于参数的函数, 
 一个判断式类是一个仿函数类, 它的operator()函数是一个判断式
 
-21 使仿函数类可以适配
+21. 使仿函数类可以适配
 正规方法是从一个基类, 或, 更精确地说, 一个基结构, 继承它们. operator()带一个实参的仿函数类, 要继承的结构是std::unary_function. operator()带有两个实参的仿函数类, 要继承的结构std::binary_function. 
 
 如:
