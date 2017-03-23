@@ -16,8 +16,8 @@
   - Shell **E**
   
 - 数据库
-    - 关系型: MySQL; Oracle.
-    - 非关系型: Redis(NoSQL)
+  - 关系型: MySQL; Oracle.
+  - 非关系型: Redis(NoSQL)
     
 - 数据结构
   - 顺序: 插入/前端插入/后端插入/查询/删除/FIFO/FILO 根据性能选择具体实现
@@ -100,7 +100,7 @@
       - 迁移
       
   - 产品
-    @todo
+    - @todo
     
   - 架构
-    @todo
+    - @todo
